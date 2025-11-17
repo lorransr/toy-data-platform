@@ -64,13 +64,12 @@ http://localhost:9000
 
 e crie a chave de api que sera usada nos arquivos `.env`
 
-voce pode cria-la acessando a url: http://localhost:9001/access-keys/new-account, copiar a chave de acesso e chave secreta e depois clicar em `create`
-
+para o nosso caso, a chave de acesso sera root e a chave secreta sera rootrootroot
 
 3. Configure as variáveis de ambiente dos serviços
 
 A maioria das variáveis sensíveis deve ser definida nos arquivos `.env` específicos de cada serviço.
-Dentro das pastas dos serviços (airflow,dbt,dlt e trino) temos arquivos `.env.sample` que podem ser usados como base para criação dos arquivos `.env`. 
+Dentro das pastas dos serviços (airflow,dbt,dlt e trino) temos arquivos `.env.sample` que podem ser usados como base para criação dos arquivos `.env`.
 Nesses arquivos `.env` nosso objetivo é preencher a credencial de access_key_id e secret_access_key que pegamos do minio.
 
 4. Suba os containers restantes
