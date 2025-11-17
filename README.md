@@ -52,7 +52,7 @@ Este projeto define uma plataforma de dados completa utilizando `Docker Compose`
 2. **Suba os container do minio primeiramente:**
 
    ```bash
-   docker-compose up minio
+   docker-compose up minio createbuckets
    ```
 
 Depois, Acesse a interface do MinIO no navegador:
