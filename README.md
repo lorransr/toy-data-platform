@@ -44,41 +44,18 @@ Este projeto define uma plataforma de dados completa utilizando `Docker Compose`
 
 1. **Clone o repositório:**
 
-   ```bash
-   git clone https://github.com/seu-usuario/data-platform.git
-   cd data-platform
-   ```
-
-2. **Suba os container do minio primeiramente:**
-
-   ```bash
-   docker-compose up minio createbuckets
-   ```
-
-Depois, Acesse a interface do MinIO no navegador:
+```bash
+git clone https://github.com/seu-usuario/data-platform.git
+cd data-platform
 ```
-http://localhost:9000
-```
-- Usuário: `root`
-- Senha: `rootrootroot`
 
-e crie a chave de api que sera usada nos arquivos `.env`
+2. Suba os containers
 
-para o nosso caso, a chave de acesso sera root e a chave secreta sera rootrootroot
-
-3. Configure as variáveis de ambiente dos serviços
-
-A maioria das variáveis sensíveis deve ser definida nos arquivos `.env` específicos de cada serviço.
-Dentro das pastas dos serviços (airflow,dbt,dlt e trino) temos arquivos `.env.sample` que podem ser usados como base para criação dos arquivos `.env`.
-Nesses arquivos `.env` nosso objetivo é preencher a credencial de access_key_id e secret_access_key que pegamos do minio.
-
-4. Suba os containers restantes
-
-```
+```bash
 docker compose up -d
 ```
 
-5. **Acesse os serviços:**
+3. **Acesse os serviços:**
 
    - Airflow: [http://localhost:8080](http://localhost:8080)
      - Login: `airflow` / `airflow`
@@ -97,6 +74,11 @@ Ao iniciar, os seguintes buckets são criados:
 - `trusted`
 - `refined`
 
+## Catálogos criados automaticamente no Lakekeeper
+- `raw`
+- `trusted`
+- `refined`
+
 ---
 
 ## 🛠️ Customizações possíveis
@@ -105,6 +87,8 @@ Ao iniciar, os seguintes buckets são criados:
 - Adicionar catálogos no Trino (`trino/catalog/*.properties`)
 - Criar visualizações no Superset
 - Integrar políticas no Lakekeeper com AuthZ (atualmente `allowall`)
+- Ingestão de novas entidades com o dlt
+- montar um workflow de materialização com o dbt e o airflow
 
 ---
 

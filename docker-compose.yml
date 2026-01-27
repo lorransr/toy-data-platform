@@ -126,12 +126,6 @@ services:
       - LAKEKEEPER__PG_DATABASE_URL_WRITE=postgresql://postgres:postgres@lakekeeper_db:5432/postgres
       - LAKEKEEPER__AUTHZ_BACKEND=allowall
     command: [ "serve" ]
-    healthcheck:
-      test: [ "CMD", "/home/nonroot/iceberg-catalog", "healthcheck" ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -200,6 +194,39 @@ services:
     ports:
       - "5434:5432"
 
+  bootstrap-lakekeeper:
+    image: curlimages/curl
+    depends_on:
+      - lakekeeper
+    restart: "no"
+    command:
+      - -w
+      - "%{http_code}"
+      - "-X"
+      - "POST"
+      - "-v"
+      - "http://lakekeeper:8181/management/v1/bootstrap"
+      - "-H"
+      - "Content-Type: application/json"
+      - "--data"
+      - '{"accept-terms-of-use": true}'
+      - "-o"
+      - "/dev/null"
+
+  create-warehouse:
+    image: curlimages/curl
+    depends_on:
+      bootstrap-lakekeeper:
+        condition: service_completed_successfully
+      createbuckets:
+        condition: service_completed_successfully
+    restart: "no"
+    entrypoint: [ "sh", "/home/curl_user/create_warehouse.sh" ]
+    volumes:
+      - ./lakekeeper/raw.json:/home/curl_user/raw.json
+      - ./lakekeeper/trusted.json:/home/curl_user/trusted.json
+      - ./lakekeeper/refined.json:/home/curl_user/refined.json
+      - ./lakekeeper/create_warehouse.sh:/home/curl_user/create_warehouse.sh
 volumes:
   minio-data:
   lakekeeper-data:
