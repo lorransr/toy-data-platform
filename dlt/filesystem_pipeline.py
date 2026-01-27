@@ -1,7 +1,6 @@
 import dlt
 import argparse
 import pandas as pd
-from utils.iceberg import create_or_update_iceberg_table, get_generated_parquet_files
 
 
 def stream_csv(table_name):
@@ -17,13 +16,10 @@ def main(table_name, table_catalog="raw", table_schema="movies"):
     )
 
     load_info = pipeline.run(
-        stream_csv(table_name), write_disposition="append", table_name=table_name
-    )
-
-    parquet_paths = get_generated_parquet_files(table_catalog, pipeline, table_name)
-    print(f"generated_files: {parquet_paths}")
-    create_or_update_iceberg_table(
-        table_catalog, table_schema, table_name, parquet_paths
+        stream_csv(table_name),
+        write_disposition="append",
+        table_name=table_name,
+        table_format="iceberg",
     )
 
     print(load_info)
