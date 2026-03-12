@@ -1,7 +1,6 @@
 *-data/
 venv
 __pycache__
-.env
 target/
 logs/
 .user.yml
