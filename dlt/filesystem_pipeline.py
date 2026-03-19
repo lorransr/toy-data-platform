@@ -17,7 +17,7 @@ def main(table_name, table_catalog="raw", table_schema="movies"):
 
     load_info = pipeline.run(
         stream_csv(table_name),
-        write_disposition="append",
+        write_disposition="replace",
         table_name=table_name,
         table_format="iceberg",
     )
