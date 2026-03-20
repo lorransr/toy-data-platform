@@ -1,116 +1,84 @@
-# 🛠️ Toy data platform
+# 🛠️ Toy Data Platform
 
-Este projeto define uma plataforma de dados completa utilizando `Docker Compose`, com os seguintes componentes principais:
+Bem-vindo(a)! Este projeto é uma plataforma de dados pronta para usar, criada para quem quer aprender ou experimentar com ferramentas modernas de dados — sem complicação.
 
-- **Apache Airflow** (orquestração de dados)
-- **MinIO** (data lake S3-compatible)
-- **Lakekeeper** (catálogo de metadados para tabelas Iceberg)
-- **Trino** (engine de consulta SQL distribuída)
-- **Apache Superset** (BI e visualização de dados)
-- **dlt** (Ingestão de dados)
-- **dbt** (Transformação de dados)
+## O que é isso?
 
----
+Imagine um "laboratório de dados" completo, onde você pode testar, visualizar e transformar dados, tudo no seu próprio computador. Você não precisa instalar nada complicado: basta rodar um comando e tudo funciona junto, graças ao Docker.
 
-## Arquitetura
+## Principais recursos
+
+- **Airflow**: Automatiza tarefas, como buscar e processar dados em horários programados.
+- **MinIO**: Um lugar para guardar arquivos e dados, parecido com o Google Drive, mas para projetos de dados.
+- **Lakekeeper**: Organiza e cataloga as tabelas de dados, facilitando encontrar o que você precisa.
+- **Trino**: Permite fazer buscas e análises em grandes volumes de dados usando uma linguagem parecida com o Excel (SQL).
+- **Superset**: Crie gráficos e dashboards bonitos para visualizar seus dados.
+- **dlt**: Ferramenta para trazer dados de outros lugares para sua plataforma.
+- **dbt**: Ajuda a transformar e organizar os dados para que fiquem prontos para análise.
+
+## Como funciona a plataforma?
+
+Veja abaixo um desenho mostrando como as ferramentas se conectam (não se preocupe se não entender tudo agora!):
 
 ![Eng Diagram](eng-diagram.png "Diagram")
 
----
+## Pré-requisitos
 
-# Serviços
+- [Docker](https://www.docker.com/) (permite rodar tudo facilmente)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-| Serviço           | Porta | Função |
-|-------------------|-------|--------|
-| **Airflow Web**       | 8080  | UI para orquestração de DAGs |
-| **MinIO Console**     | 9001  | Interface S3-like para dados |
-| **Trino**             | 8081  | SQL Query Engine |
-| **Lakekeeper**        | 8181  | Catálogo de metadados Iceberg |
-| **Superset**          | 8088  | Dashboards e visualizações |
-| **Postgres (Airflow)**| 5432  | Banco de metadados do Airflow |
-| **Postgres (Lakekeeper)**| 5433 | Banco do catálogo Lakekeeper |
-| **Postgres (Superset)**| 5434 | Banco do Superset |
+## Como usar? (Passo a passo)
 
----
+1. **Baixe este projeto:**
+   ```bash
+   git clone https://github.com/seu-usuario/data-platform.git
+   cd data-platform
+   ```
 
-## ⚙️ Pré-requisitos
+2. **Ligue a plataforma:**
+   ```bash
+   docker compose up -d
+   ```
+   Isso vai iniciar todos os serviços automaticamente.
 
-- Docker
-- Docker Compose
-
----
-
-## ▶️ Instruções de uso
-
-1. **Clone o repositório:**
-
-```bash
-git clone https://github.com/seu-usuario/data-platform.git
-cd data-platform
-```
-
-2. Suba os containers
-
-```bash
-docker compose up -d
-```
-
-3. **Acesse os serviços:**
-
-   - Airflow: [http://localhost:8080](http://localhost:8080)
-     - Login: `airflow` / `airflow`
-   - MinIO: [http://localhost:9001](http://localhost:9001)
-     - Login: `root` / `rootrootroot`
-   - Trino UI: [http://localhost:8081](http://localhost:8081)
+3. **Acesse as ferramentas:**
+   - Airflow: [http://localhost:8080](http://localhost:8080)  
+     Login: `airflow` / `airflow`
+   - MinIO: [http://localhost:9001](http://localhost:9001)  
+     Login: `root` / `rootrootroot`
+   - Trino: [http://localhost:8081](http://localhost:8081)
    - Superset: [http://localhost:8088](http://localhost:8088)
    - Lakekeeper: [http://localhost:8181](http://localhost:8181)
----
 
-## 🗂️ Buckets criados automaticamente no MinIO
+## O que já vem pronto?
 
-Ao iniciar, os seguintes buckets são criados:
-``
-- `raw`
-- `trusted`
-- `refined`
+- Pastas para guardar dados no MinIO:  
+  `raw`, `trusted`, `refined`
+- Catálogos organizados no Lakekeeper:  
+  `raw`, `trusted`, `refined`
 
-## Catálogos criados automaticamente no Lakekeeper
-- `raw`
-- `trusted`
-- `refined`
+## O que você pode personalizar?
 
----
+- Criar seus próprios fluxos de tarefas no Airflow (adicione arquivos em `airflow/dags`)
+- Adicionar novas fontes de dados no Trino
+- Criar dashboards no Superset
+- Integrar regras de acesso no Lakekeeper
+- Trazer novos dados com o dlt
+- Montar fluxos de transformação com dbt e Airflow
 
-## 🛠️ Customizações possíveis
+## Como saber se está funcionando?
 
-- Adicionar DAGs personalizados em `airflow/dags`
-- Adicionar catálogos no Trino (`trino/catalog/*.properties`)
-- Criar visualizações no Superset
-- Integrar políticas no Lakekeeper com AuthZ (atualmente `allowall`)
-- Ingestão de novas entidades com o dlt
-- montar um workflow de materialização com o dbt e o airflow
-
----
-
-## Testes e verificação
-
-Para verificar se os serviços estão de pé:
-
+Rode:
 ```bash
 docker ps
 ```
+Você deve ver todos os serviços rodando. Se tiver dúvidas, pergunte!
 
-Você deve ver todos os containers rodando corretamente.
+## Dicas e informações
 
----
-
-## Notas
-
-- A configuração usa `LocalExecutor` para facilitar testes locais.
-- A comunicação entre os serviços acontece via rede Docker `platform-net`.
-
----
+- A configuração foi feita para ser fácil de testar localmente.
+- Todos os serviços se comunicam entre si automaticamente.
 
 ## 🧑‍💻 Contribuindo
 
-Pull Requests são bem-vindos! Sinta-se livre para abrir issues ou sugerir melhorias.
+Pull Requests são super bem-vindos! Se tiver ideias ou encontrar problemas, abra uma issue ou mande uma sugestão.
