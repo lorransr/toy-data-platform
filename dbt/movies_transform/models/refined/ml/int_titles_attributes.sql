@@ -1,6 +1,6 @@
 {{ config(materialized='ephemeral') }}
 
--- Um título por linha, com os atributos multi-valor (gênero, país) ainda como lista.
+-- Um título por linha, com os atributos multi-valor (gênero, país, elenco) ainda como lista.
 --
 -- Esta é a fonte única do grão "um título" para o fato e para as tabelas de ponte:
 -- a mesma regra de deduplicação (menor `show_id` no Netflix) precisa valer nos dois
@@ -16,6 +16,7 @@ with deduped as (
         duration,
         listed_in,
         country,
+        "cast",
         row_number() over (
             partition by lower(trim(title)) order by show_id
         ) as rn
@@ -30,6 +31,7 @@ select
     release_year,
     duration,
     listed_in,
-    country
+    country,
+    "cast"
 from deduped
 where rn = 1

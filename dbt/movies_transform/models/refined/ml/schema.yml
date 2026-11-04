@@ -96,6 +96,44 @@ models:
                 to: ref('dim_country')
                 field: country_key
 
+  - name: dim_cast
+    description: >
+      Dimensão de elenco: um ator (`cast_key`) por linha, derivado da ponte
+      título-ator. Resolve o atributo multi-valor `cast` da origem.
+    columns:
+      - name: cast_key
+        description: "Nome do ator (chave natural)."
+        tests:
+          - unique
+          - not_null
+
+  - name: bridge_title_cast
+    description: >
+      Ponte título ↔ ator, uma linha por par (título, ator). Um título com N atores
+      aparece N vezes. Títulos sem elenco na origem não entram na ponte.
+    columns:
+      - name: title_cast_key
+        description: "Chave do par título-ator (`title_key|cast_key`)."
+        tests:
+          - unique
+          - not_null
+      - name: title_key
+        description: "Título, referência a `fct_titles`."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('fct_titles')
+                field: title_key
+      - name: cast_key
+        description: "Ator, referência a `dim_cast`."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cast')
+                field: cast_key
+
   - name: fct_titles
     description: >
       Fato de títulos no grão de um título (`title_key`). Medidas: nota da crítica
